@@ -436,8 +436,8 @@ public class T2UserServiceImpl implements T2UserService {
 			if(attrIDs != null) {
 				constraints.setReturningAttributes(attrIDs);
 			}
-			
-			String searchKey = StringUtil.avoidNull(CommonFunction.getProperty("ldap.search.key"), "");
+			String searchKey = "ou=users,dc=fosslight,dc=org";
+			//String searchKey = StringUtil.avoidNull(CommonFunction.getProperty("ldap.search.key"), "");
 			m_ne = con.search(searchKey, filter, constraints);
 		} catch (NamingException e) {
 			log.error(e.getMessage(), e);
@@ -632,7 +632,7 @@ public class T2UserServiceImpl implements T2UserService {
 				constraints.setReturningAttributes(attrIDs);
 			}
 
-			String searchKey = StringUtil.avoidNull(CommonFunction.getProperty("ldap.search.key"), "");
+			String searchKey = "ou=users,dc=fosslight,dc=org";
 			m_ne = con.search(searchKey, filter, constraints);
 		} catch (NamingException e) {
 			log.error(e.getMessage(), e);

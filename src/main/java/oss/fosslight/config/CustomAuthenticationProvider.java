@@ -78,7 +78,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 		if (StringUtil.isNotEmpty(user_pw)) {
 			
-			// 사용자 가입여부 체크
+			/*// 사용자 가입여부 체크
 			if(!userService.existUserIdOrEmail(user_id)){
 				Map<String, String> userInfo = new HashMap<>();
 				T2Users vo = new T2Users();
@@ -100,19 +100,26 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 				vo.setDivision(CoConstDef.CD_USER_DIVISION_EMPTY);
 
 				userService.addNewUsers(vo);
-			}
+			}*/
 			
 			String ldapDomain = CoCodeManager.getCodeExpString(CoConstDef.CD_LOGIN_SETTING, CoConstDef.CD_LDAP_DOMAIN);
 			Hashtable<String, String> properties = new Hashtable<String, String>();
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, CoConstDef.AD_LDAP_LOGIN.INITIAL_CONTEXT_FACTORY.getValue());
+			/*properties.put(Context.INITIAL_CONTEXT_FACTORY, CoConstDef.AD_LDAP_LOGIN.INITIAL_CONTEXT_FACTORY.getValue());
 			properties.put(Context.PROVIDER_URL, CoConstDef.AD_LDAP_LOGIN.LDAP_SERVER_URL.getValue());
 			properties.put(Context.SECURITY_AUTHENTICATION, "simple");
 			properties.put(Context.SECURITY_PRINCIPAL, user_id+ldapDomain);
 			properties.put(Context.SECURITY_CREDENTIALS, user_pw);
+*/
+			properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+			properties.put(Context.PROVIDER_URL, "ldap://localhost:389");
+			properties.put(Context.SECURITY_AUTHENTICATION, "simple");
+			properties.put(Context.SECURITY_PRINCIPAL, "cn=admin,dc=fosslight,dc=org");
+			properties.put(Context.SECURITY_CREDENTIALS, "admin");
 
 			DirContext con = null;
 			try {
 				con = new InitialDirContext(properties);
+				log.warn("LDAP LOGIN!! userId : " + user_id);
 				isAuthenticated = true;
 			}catch (NamingException e) {
 				log.warn("LDAP NamingException userId : " + user_id + " ERROR Message :" + e.getMessage());
